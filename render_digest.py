@@ -382,6 +382,16 @@ TEMPLATE_FILENAME = "digest_template.html"
 BODY_START = "<!-- ======================= EMAIL BODY"
 BODY_END = "<!-- ===================== /EMAIL BODY ===================== -->"
 
+# Body-only output carries no HTML comments at all — not the markers, not the
+# section labels inside them. The Gmail send path the routine uses rewrites the
+# markup it is handed, and a comment does not reliably survive: the 2026-09-03
+# digest rendered the opening marker as a visible line of text above the card
+# (#340). Dropping them costs nothing (they are notes to whoever edits the
+# template, and the preview page keeps them) and removes the failure mode.
+# A comment on a line of its own takes the whole line with it, so the body keeps the
+# template's shape instead of gaining a blank line wherever a note used to be.
+COMMENT_RE = re.compile(r"[ \t]*<!--.*?-->[ \t]*\n?", re.DOTALL)
+
 
 class TemplateError(Exception):
     """Raised for a malformed template — a build-time bug, never payload-driven."""
@@ -642,12 +652,16 @@ def load_template() -> str:
 
 
 def email_body(document: str) -> str:
-    """Just the inline-styled email, without the standalone preview page's chrome."""
+    """Just the inline-styled email, without the preview page's chrome or any comments.
+
+    Stripping every `<!-- ... -->` from the slice is safe because each interpolated
+    value is HTML-escaped, so no payload can introduce a comment of its own.
+    """
     start = document.find(BODY_START)
     end = document.find(BODY_END)
     if start == -1 or end == -1:
         return document
-    return document[start:end + len(BODY_END)]
+    return COMMENT_RE.sub("", document[start:end + len(BODY_END)]).strip() + "\n"
 
 
 def render_digest(payload: dict, body_only: bool = False, template: str | None = None) -> str:
