@@ -120,7 +120,7 @@ EMBEDDED_TEMPLATE = r'''<title>Inbox Triage Digest</title>
 <div class="shell">
   <div class="intro">
     <h1>Inbox Triage — Email Template</h1>
-    <p>Production markup below (inline-styled, table-based) — this is the literal HTML the digest sends. One subject line carries the whole summary; every section is a color-coded, icon-led card instead of a divider list, so the shape of the day reads before any of the words do.</p>
+    <p>Production markup below (inline-styled, table-based) — this is the literal HTML the digest sends. One subject line carries the whole summary; every section is a color-coded card under a colored label instead of a divider list, so the shape of the day reads before any of the words do. Fills are <code>background-color</code> and <code>bgcolor</code> only, because the Gmail send path drops the <code>background</code> shorthand.</p>
     <div class="subject-line">Subject: <b>{{subject}}</b></div>
   </div>
 
@@ -128,43 +128,42 @@ EMBEDDED_TEMPLATE = r'''<title>Inbox Triage Digest</title>
     <div class="frame-bar"><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span>&nbsp; to: fisher@fisherevans.com</div>
 
 <!-- ======================= EMAIL BODY (portable / inline-styled) ======================= -->
-<div style="background:#eef1f8;padding:28px 16px;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-<div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e5f0;">
+<div style="background-color:#eef1f8;padding:28px 16px;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<div style="max-width:600px;margin:0 auto;background-color:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e5f0;">
 
   <!-- Masthead -->
-  <div style="background:#1c3f96;background:linear-gradient(135deg,#2451b8,#1c3f96);padding:26px 26px 22px;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td valign="middle">
-        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-          <td style="width:38px;height:38px;background:rgba(255,255,255,0.16);border-radius:10px;text-align:center;vertical-align:middle;" valign="middle" align="center">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 L12 14 L21 8"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
-          </td>
-          <td style="padding-left:12px;" valign="middle">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#1c3f96" style="background-color:#1c3f96;">
+    <tr>
+      <td bgcolor="#1c3f96" style="background-color:#1c3f96;padding:24px 26px 22px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td valign="middle">
             <div style="font-family:'Manrope',-apple-system,sans-serif;font-weight:800;font-size:19px;color:#ffffff;letter-spacing:-0.01em;">Inbox triage</div>
-            <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:#c7d6f7;margin-top:1px;">{{date_label}}</div>
+            <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:#c7d6f7;margin-top:3px;">{{date_label}}</div>
+          </td>
+          <td align="right" valign="middle">
+{{#completed_at}}
+            <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+              <td bgcolor="#33589f" style="background-color:#33589f;border-radius:20px;padding:7px 13px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#e8edfb;white-space:nowrap;">Completed {{completed_at}}</td>
+            </tr></table>
+{{/completed_at}}
           </td>
         </tr></table>
       </td>
-      <td align="right" valign="middle">
-{{#completed_at}}
-        <div style="display:inline-block;background:rgba(255,255,255,0.14);border-radius:20px;padding:7px 13px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#e8edfb;">Completed {{completed_at}}</div>
-{{/completed_at}}
-      </td>
-    </tr></table>
-  </div>
+    </tr>
+  </table>
 
   <!-- KPI strip -->
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-bottom:1px solid #eef0f6;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f7f9fd" style="background-color:#f7f9fd;border-bottom:1px solid #e6eaf4;">
     <tr>
-      <td width="25%" align="center" style="padding:18px 6px;border-right:1px solid #eef0f6;">
+      <td width="25%" align="center" style="padding:18px 6px;border-right:1px solid #e6eaf4;">
         <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;font-size:22px;color:#2451b8;">{{count_todos}}</div>
         <div style="font-size:11px;color:#6b7390;margin-top:2px;">{{label_todos}}</div>
       </td>
-      <td width="25%" align="center" style="padding:18px 6px;border-right:1px solid #eef0f6;">
+      <td width="25%" align="center" style="padding:18px 6px;border-right:1px solid #e6eaf4;">
         <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;font-size:22px;color:#1e9e74;">{{count_events}}</div>
         <div style="font-size:11px;color:#6b7390;margin-top:2px;">{{label_events}}</div>
       </td>
-      <td width="25%" align="center" style="padding:18px 6px;border-right:1px solid #eef0f6;">
+      <td width="25%" align="center" style="padding:18px 6px;border-right:1px solid #e6eaf4;">
         <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;font-size:22px;color:#7b5cc9;">{{count_archived}}</div>
         <div style="font-size:11px;color:#6b7390;margin-top:2px;">archived</div>
       </td>
@@ -177,159 +176,160 @@ EMBEDDED_TEMPLATE = r'''<title>Inbox Triage Digest</title>
 
 {{#fetch_failed}}
   <!-- ===== FETCH FAILURE NOTICE ===== -->
-  <div style="margin:18px 22px 0;background:#fbeae8;border:1px solid #f3cfcb;border-radius:12px;padding:12px 16px;font-size:12px;color:#a53a32;line-height:1.6;">
-    <b style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:#c8463d;">Partial run —</b> at least one fetch failed while this digest was built, so the sections below may be incomplete.
-  </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0 0;"><tr>
+    <td style="padding:0 22px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td bgcolor="#fbeae8" style="background-color:#fbeae8;border:1px solid #f3cfcb;border-radius:12px;padding:12px 16px;font-size:12px;color:#a53a32;line-height:1.6;">
+          <b style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;color:#c8463d;">Partial run —</b> at least one fetch failed while this digest was built, so the sections below may be incomplete.
+        </td>
+      </tr></table>
+    </td>
+  </tr></table>
 {{/fetch_failed}}
 
   <div style="padding:22px 22px 8px;">
 
 {{#has_events}}
     <!-- ===== CALENDAR ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:10px;"><tr>
-      <td style="width:22px;height:22px;background:#e4f7ef;border-radius:6px;text-align:center;vertical-align:middle;" valign="middle" align="center">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1e9e74" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      </td>
-      <td style="padding-left:8px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:0.04em;color:#1e9e74;text-transform:uppercase;" valign="middle">Calendar</td>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
+      <td bgcolor="#1e9e74" style="background-color:#1e9e74;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">Calendar</td>
     </tr></table>
 
 {{#events}}
-    <div style="background:#e4f7ef;border:1px solid #bfead9;border-radius:12px;padding:14px 16px;margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;">
-      <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
-        <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #1e9e7466;">{{title}}</a>
-      </div>
-      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:8px;"><tr>
-        <td style="padding-right:14px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3d7a63" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px;margin-right:4px;"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>{{when}}
-        </td>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
+      <td bgcolor="#e4f7ef" style="background-color:#e4f7ef;border:1px solid #bfead9;border-radius:12px;padding:14px 16px;">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
+          <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #7fc4ac;">{{title}}</a>
+        </div>
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:8px;"><tr>
+          <td style="padding-right:14px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">{{when}}</td>
 {{#location}}
-        <td style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3d7a63" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px;margin-right:4px;"><path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>{{location}}
-        </td>
+          <td style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">{{location}}</td>
 {{/location}}
-      </tr></table>
+        </tr></table>
 {{#reconciled_note}}
-      <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #bfead9;font-size:11.5px;color:#4d8a72;">
-        {{reconciled_note}}
-      </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #bfead9;font-size:11.5px;color:#4d8a72;">
+          {{reconciled_note}}
+        </div>
 {{/reconciled_note}}
-    </div>
+      </td>
+    </tr></table>
 {{/events}}
 {{/has_events}}
 {{#has_todos}}
     <!-- ===== TO-DOS ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:10px;"><tr>
-      <td style="width:22px;height:22px;background:#eaf0fe;border-radius:6px;text-align:center;vertical-align:middle;" valign="middle" align="center">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2451b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8,12.5 11,15.5 16.5,9"/></svg>
-      </td>
-      <td style="padding-left:8px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:0.04em;color:#2451b8;text-transform:uppercase;" valign="middle">To-dos created</td>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
+      <td bgcolor="#2451b8" style="background-color:#2451b8;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">To-dos created</td>
     </tr></table>
 
 {{#todos}}
-    <div style="background:#eaf0fe;border:1px solid #c9d9fb;border-radius:12px;padding:14px 16px;margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-        <td>
-          <a href="{{@url}}" style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;text-decoration:none;border-bottom:1px solid #2451b866;">{{title}}</a>
-        </td>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
+      <td bgcolor="#eaf0fe" style="background-color:#eaf0fe;border:1px solid #c9d9fb;border-radius:12px;padding:14px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td>
+            <a href="{{@url}}" style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;text-decoration:none;border-bottom:1px solid #8fabe4;">{{title}}</a>
+          </td>
 {{#due}}
-        <td align="right" style="white-space:nowrap;">
-          <span style="display:inline-block;background:#fbeae8;color:#c8463d;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:10px;">{{due}}</span>
-        </td>
+          <td align="right" valign="top" style="white-space:nowrap;padding-left:10px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+              <td bgcolor="#fbdedb" style="background-color:#fbdedb;border-radius:10px;padding:3px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#b53d34;white-space:nowrap;">{{due}}</td>
+            </tr></table>
+          </td>
 {{/due}}
-      </tr></table>
+        </tr></table>
 {{#source_link}}
-      <div style="margin-top:8px;font-size:12px;color:#3355a3;"><a href="{{@source_link}}" style="color:#3355a3;">source email</a></div>
+        <div style="margin-top:8px;font-size:12px;color:#3355a3;"><a href="{{@source_link}}" style="color:#3355a3;">source email</a></div>
 {{/source_link}}
 {{#reconciled_note}}
-      <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #c9d9fb;font-size:11.5px;color:#3355a3;">
-        {{reconciled_note}}
-      </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #c9d9fb;font-size:11.5px;color:#3355a3;">
+          {{reconciled_note}}
+        </div>
 {{/reconciled_note}}
-    </div>
+      </td>
+    </tr></table>
 {{/todos}}
 {{/has_todos}}
 {{#has_threads}}
     <!-- ===== FROM A THREAD LEFT IN YOUR INBOX ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:10px;"><tr>
-      <td style="width:22px;height:22px;background:#fcf1dd;border-radius:6px;text-align:center;vertical-align:middle;" valign="middle" align="center">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b9790e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5"/></svg>
-      </td>
-      <td style="padding-left:8px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:0.04em;color:#b9790e;text-transform:uppercase;" valign="middle">From a thread left in your inbox</td>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
+      <td bgcolor="#b9790e" style="background-color:#b9790e;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">From a thread left in your inbox</td>
     </tr></table>
 
 {{#from_personal_threads}}
-    <div style="background:#fcf1dd;border:1px solid #f2dcae;border-radius:12px;padding:14px 16px;margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;">
-      <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
-        <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #b9790e66;">{{title}}</a>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
+      <td bgcolor="#fcf1dd" style="background-color:#fcf1dd;border:1px solid #f2dcae;border-radius:12px;padding:14px 16px;">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
+          <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #d9b055;">{{title}}</a>
 {{#kind_label}}
-        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;font-weight:600;color:#8a5c0a;background:#f2dcae;padding:2px 7px;border-radius:8px;margin-left:6px;vertical-align:1px;">{{kind_label}}</span>
+          <span style="display:inline-block;background-color:#f2dcae;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;font-weight:600;color:#8a5c0a;padding:2px 7px;border-radius:8px;margin-left:6px;">{{kind_label}}</span>
 {{/kind_label}}
-      </div>
+        </div>
 {{#when_or_due}}
-      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:8px;"><tr>
-        <td style="padding-right:14px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#8a5c0a;">{{when_or_due}}</td>
-      </tr></table>
+        <div style="margin-top:8px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#8a5c0a;">{{when_or_due}}</div>
 {{/when_or_due}}
 {{#note}}
-      <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #f2dcae;font-size:11.5px;color:#8a5c0a;">
-        {{note}}
-      </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #f2dcae;font-size:11.5px;color:#8a5c0a;">
+          {{note}}
+        </div>
 {{/note}}
-    </div>
+      </td>
+    </tr></table>
 {{/from_personal_threads}}
 {{/has_threads}}
 {{#has_family_calendar}}
     <!-- ===== FAMILY CALENDAR ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:10px;"><tr>
-      <td style="width:22px;height:22px;background:#e4f7ef;border-radius:6px;text-align:center;vertical-align:middle;" valign="middle" align="center">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1e9e74" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      </td>
-      <td style="padding-left:8px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:0.04em;color:#1e9e74;text-transform:uppercase;" valign="middle">Family calendar</td>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
+      <td bgcolor="#1e9e74" style="background-color:#1e9e74;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">Family calendar</td>
     </tr></table>
 
 {{#family_calendar}}
-    <div style="background:#e4f7ef;border:1px solid #bfead9;border-radius:12px;padding:14px 16px;margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;">
-      <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
-        <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #1e9e7466;">{{title}}</a>
-      </div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
+      <td bgcolor="#e4f7ef" style="background-color:#e4f7ef;border:1px solid #bfead9;border-radius:12px;padding:14px 16px;">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
+          <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #7fc4ac;">{{title}}</a>
+        </div>
 {{#when}}
-      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:8px;"><tr>
-        <td style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3d7a63" stroke-width="2" stroke-linecap="round" style="vertical-align:-1px;margin-right:4px;"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>{{when}}
-        </td>
-      </tr></table>
+        <div style="margin-top:8px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">{{when}}</div>
 {{/when}}
-    </div>
+      </td>
+    </tr></table>
 {{/family_calendar}}
 {{/has_family_calendar}}
 {{#has_archived}}
     <!-- ===== ARCHIVED ===== -->
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
-      <td style="width:22px;height:22px;background:#f1ecfc;border-radius:6px;text-align:center;vertical-align:middle;" valign="middle" align="center">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7b5cc9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M4 8h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><line x1="10" y1="12.5" x2="14" y2="12.5"/></svg>
-      </td>
-      <td style="padding-left:8px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:0.04em;color:#7b5cc9;text-transform:uppercase;" valign="middle">Archived · {{count_archived}}</td>
+      <td bgcolor="#7b5cc9" style="background-color:#7b5cc9;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">Archived · {{count_archived}}</td>
     </tr></table>
 
 {{#archived}}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:{{#_first}}14{{/_first}}{{^_first}}16{{/_first}}px 0 6px;"><tr>
       <td style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:11.5px;color:#5b4a91;letter-spacing:0.02em;text-transform:uppercase;">{{category}}</td>
-      <td align="right" style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;color:#8f7fc4;background:#f1ecfc;border-radius:8px;padding:2px 8px;">{{count}}</td>
+      <td align="right" width="40">
+        <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+          <td bgcolor="#ece5fa" style="background-color:#ece5fa;border-radius:8px;padding:2px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#6a4cb8;">{{count}}</td>
+        </tr></table>
+      </td>
     </tr></table>
     <div style="border:1px solid #eee9fa;border-radius:10px;overflow:hidden;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 {{#items}}
         <tr{{^_last}} style="border-bottom:1px solid #f2effa;"{{/_last}}>
-          <td style="padding:10px 12px;width:30px;">
-            <div style="width:22px;height:22px;border-radius:6px;background:{{brand_color}};color:#fff;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;text-align:center;line-height:22px;">{{brand_initial}}</div>
+          <td valign="top" style="padding:11px 0 11px 12px;width:34px;">
+            <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+              <td width="22" height="22" align="center" valign="middle" bgcolor="{{brand_color}}" style="width:22px;height:22px;background-color:{{brand_color}};border-radius:6px;color:#ffffff;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;text-align:center;">{{brand_initial}}</td>
+            </tr></table>
           </td>
-          <td style="padding:10px 4px;">
+          <td style="padding:10px 4px 10px 10px;">
             <a href="#" style="font-size:13px;color:#171a24;text-decoration:none;">{{subject}}</a>
             <div style="font-size:11px;color:#9aa0b4;margin-top:1px;">{{sender}}{{#gist}} · {{gist}}{{/gist}}</div>
           </td>
 {{#unsubscribe_link}}
-          <td align="right" style="padding:10px 12px;white-space:nowrap;">
-            <a href="{{@unsubscribe_link}}" style="display:inline-block;background:#f5f2fc;color:#7b5cc9;font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px;text-decoration:none;">Unsub</a>
+          <td align="right" valign="middle" style="padding:10px 12px;white-space:nowrap;">
+            <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+              <td bgcolor="#f0ebfb" style="background-color:#f0ebfb;border-radius:8px;padding:4px 10px;">
+                <a href="{{@unsubscribe_link}}" style="color:#6a4cb8;font-size:11px;font-weight:600;text-decoration:none;">Unsub</a>
+              </td>
+            </tr></table>
           </td>
 {{/unsubscribe_link}}
 {{^unsubscribe_link}}
@@ -351,16 +351,23 @@ EMBEDDED_TEMPLATE = r'''<title>Inbox Triage Digest</title>
   </div>
 
   <!-- Footer -->
-  <div style="margin:6px 22px 22px;background:#fcf1dd;border:1px solid #f2dcae;border-radius:12px;padding:14px 16px;">
-    <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:12.5px;color:#171a24;margin-bottom:4px;">Triage summary</div>
-    <div style="font-size:12px;color:#5f5233;line-height:1.6;">
-      All routine items handled — this digest is never archived, so past summaries stay put. Reconcile anytime with <code style="background:#f2dcae;padding:1px 5px;border-radius:4px;">label:AI/Triaged</code>.{{#has_left_in_inbox}} Left in your inbox: {{count_left_in_inbox}} {{label_left_in_inbox}} that need you.{{/has_left_in_inbox}}
-    </div>
-  </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 0;"><tr>
+    <td style="padding:0 22px 22px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td bgcolor="#fcf1dd" style="background-color:#fcf1dd;border:1px solid #f2dcae;border-radius:12px;padding:14px 16px;">
+          <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:12.5px;color:#171a24;margin-bottom:4px;">Triage summary</div>
+          <div style="font-size:12px;color:#5f5233;line-height:1.6;">
+            All routine items handled — this digest is never archived, so past summaries stay put. Reconcile anytime with <code style="background-color:#f2dcae;padding:1px 5px;border-radius:4px;">label:AI/Triaged</code>.{{#has_left_in_inbox}} Left in your inbox: {{count_left_in_inbox}} {{label_left_in_inbox}} that need you.{{/has_left_in_inbox}}
+          </div>
+        </td>
+      </tr></table>
+    </td>
+  </tr></table>
 
 </div>
 </div>
 <!-- ===================== /EMAIL BODY ===================== -->
+
 
   </div>
   <div class="caption">↑ this frame's contents are the literal email — inline styles, table layout, no external assets required</div>
@@ -374,16 +381,6 @@ TEMPLATE_FILENAME = "digest_template.html"
 # can forge one (every "<" from the payload is escaped), so slicing the output is safe.
 BODY_START = "<!-- ======================= EMAIL BODY"
 BODY_END = "<!-- ===================== /EMAIL BODY ===================== -->"
-
-# Body-only output carries no HTML comments at all — not the markers, not the
-# section labels inside them. The Gmail send path the routine uses rewrites the
-# markup it is handed, and a comment does not reliably survive: the 2026-09-03
-# digest rendered the opening marker as a visible line of text above the card
-# (#340). Dropping them costs nothing (they are notes to whoever edits the
-# template, and the preview page keeps them) and removes the failure mode.
-# A comment on a line of its own takes the whole line with it, so the body keeps the
-# template's shape instead of gaining a blank line wherever a note used to be.
-COMMENT_RE = re.compile(r"[ \t]*<!--.*?-->[ \t]*\n?", re.DOTALL)
 
 
 class TemplateError(Exception):
@@ -645,16 +642,12 @@ def load_template() -> str:
 
 
 def email_body(document: str) -> str:
-    """Just the inline-styled email, without the preview page's chrome or any comments.
-
-    Stripping every `<!-- ... -->` from the slice is safe because each interpolated
-    value is HTML-escaped, so no payload can introduce a comment of its own.
-    """
+    """Just the inline-styled email, without the standalone preview page's chrome."""
     start = document.find(BODY_START)
     end = document.find(BODY_END)
     if start == -1 or end == -1:
         return document
-    return COMMENT_RE.sub("", document[start:end + len(BODY_END)]).strip() + "\n"
+    return document[start:end + len(BODY_END)]
 
 
 def render_digest(payload: dict, body_only: bool = False, template: str | None = None) -> str:
