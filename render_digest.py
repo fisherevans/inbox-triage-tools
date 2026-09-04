@@ -120,7 +120,7 @@ EMBEDDED_TEMPLATE = r'''<title>Inbox Triage Digest</title>
 <div class="shell">
   <div class="intro">
     <h1>Inbox Triage — Email Template</h1>
-    <p>Production markup below (inline-styled, table-based) — this is the literal HTML the digest sends. One subject line carries the whole summary; every section is a color-coded card under a colored label instead of a divider list, so the shape of the day reads before any of the words do. Fills are <code>background-color</code> and <code>bgcolor</code> only, because the Gmail send path drops the <code>background</code> shorthand.</p>
+    <p>Production markup below (inline-styled, table-based) — this is the literal HTML the digest sends. It reads as a document with headed sections: each one is an icon, an uppercase title and a count over a rule, with its cards indented underneath, so the structure survives with the color taken out. Fills are <code>background-color</code> and <code>bgcolor</code> only, and every icon is a Unicode glyph, because the Gmail send path drops the <code>background</code> shorthand and deletes <code>&lt;img&gt;</code> outright — remote or attached, it makes no difference.</p>
     <div class="subject-line">Subject: <b>{{subject}}</b></div>
   </div>
 
@@ -136,6 +136,9 @@ EMBEDDED_TEMPLATE = r'''<title>Inbox Triage Digest</title>
     <tr>
       <td bgcolor="#1c3f96" style="background-color:#1c3f96;padding:24px 26px 22px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td width="32" valign="top" style="padding:2px 12px 0 0;">
+            <span style="font-size:17px;line-height:20px;">✉️</span>
+          </td>
           <td valign="middle">
             <div style="font-family:'Manrope',-apple-system,sans-serif;font-weight:800;font-size:19px;color:#ffffff;letter-spacing:-0.01em;">Inbox triage</div>
             <div style="font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:#c7d6f7;margin-top:3px;">{{date_label}}</div>
@@ -187,164 +190,225 @@ EMBEDDED_TEMPLATE = r'''<title>Inbox Triage Digest</title>
   </tr></table>
 {{/fetch_failed}}
 
-  <div style="padding:22px 22px 8px;">
+  <div style="padding:4px 22px 10px;">
 
 {{#has_events}}
-    <!-- ===== CALENDAR ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
-      <td bgcolor="#1e9e74" style="background-color:#1e9e74;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">Calendar</td>
-    </tr></table>
-
-{{#events}}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
-      <td bgcolor="#e4f7ef" style="background-color:#e4f7ef;border:1px solid #bfead9;border-radius:12px;padding:14px 16px;">
-        <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
-          <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #7fc4ac;">{{title}}</a>
-        </div>
-        <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:8px;"><tr>
-          <td style="padding-right:14px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">{{when}}</td>
-{{#location}}
-          <td style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">{{location}}</td>
-{{/location}}
-        </tr></table>
-{{#reconciled_note}}
-        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #bfead9;font-size:11.5px;color:#4d8a72;">
-          {{reconciled_note}}
-        </div>
-{{/reconciled_note}}
-      </td>
-    </tr></table>
-{{/events}}
-{{/has_events}}
-{{#has_todos}}
-    <!-- ===== TO-DOS ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
-      <td bgcolor="#2451b8" style="background-color:#2451b8;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">To-dos created</td>
-    </tr></table>
-
-{{#todos}}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
-      <td bgcolor="#eaf0fe" style="background-color:#eaf0fe;border:1px solid #c9d9fb;border-radius:12px;padding:14px 16px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding:24px 0 0;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td>
-            <a href="{{@url}}" style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;text-decoration:none;border-bottom:1px solid #8fabe4;">{{title}}</a>
+          <td width="26" valign="middle" style="padding:0 0 7px;">
+            <span style="font-size:16px;line-height:18px;">📅</span>
           </td>
-{{#due}}
-          <td align="right" valign="top" style="white-space:nowrap;padding-left:10px;">
+          <td valign="middle" style="padding:0 0 7px;font-family:'Manrope',-apple-system,sans-serif;font-weight:800;font-size:12px;letter-spacing:0.11em;color:#14785a;text-transform:uppercase;">Events</td>
+          <td align="right" valign="middle" style="padding:0 0 7px;">
             <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
-              <td bgcolor="#fbdedb" style="background-color:#fbdedb;border-radius:10px;padding:3px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#b53d34;white-space:nowrap;">{{due}}</td>
+              <td bgcolor="#e4f7ef" style="background-color:#e4f7ef;border-radius:9px;padding:2px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#14785a;">{{count_events}}</td>
             </tr></table>
           </td>
-{{/due}}
         </tr></table>
-{{#source_link}}
-        <div style="margin-top:8px;font-size:12px;color:#3355a3;"><a href="{{@source_link}}" style="color:#3355a3;">source email</a></div>
-{{/source_link}}
-{{#reconciled_note}}
-        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #c9d9fb;font-size:11.5px;color:#3355a3;">
-          {{reconciled_note}}
-        </div>
-{{/reconciled_note}}
-      </td>
-    </tr></table>
-{{/todos}}
-{{/has_todos}}
-{{#has_threads}}
-    <!-- ===== FROM A THREAD LEFT IN YOUR INBOX ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
-      <td bgcolor="#b9790e" style="background-color:#b9790e;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">From a thread left in your inbox</td>
-    </tr></table>
-
-{{#from_personal_threads}}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
-      <td bgcolor="#fcf1dd" style="background-color:#fcf1dd;border:1px solid #f2dcae;border-radius:12px;padding:14px 16px;">
-        <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
-          <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #d9b055;">{{title}}</a>
-{{#kind_label}}
-          <span style="display:inline-block;background-color:#f2dcae;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;font-weight:600;color:#8a5c0a;padding:2px 7px;border-radius:8px;margin-left:6px;">{{kind_label}}</span>
-{{/kind_label}}
-        </div>
-{{#when_or_due}}
-        <div style="margin-top:8px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#8a5c0a;">{{when_or_due}}</div>
-{{/when_or_due}}
-{{#note}}
-        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #f2dcae;font-size:11.5px;color:#8a5c0a;">
-          {{note}}
-        </div>
-{{/note}}
-      </td>
-    </tr></table>
-{{/from_personal_threads}}
-{{/has_threads}}
-{{#has_family_calendar}}
-    <!-- ===== FAMILY CALENDAR ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
-      <td bgcolor="#1e9e74" style="background-color:#1e9e74;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">Family calendar</td>
-    </tr></table>
-
-{{#family_calendar}}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}18{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
-      <td bgcolor="#e4f7ef" style="background-color:#e4f7ef;border:1px solid #bfead9;border-radius:12px;padding:14px 16px;">
-        <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;">
-          <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #7fc4ac;">{{title}}</a>
-        </div>
-{{#when}}
-        <div style="margin-top:8px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">{{when}}</div>
-{{/when}}
-      </td>
-    </tr></table>
-{{/family_calendar}}
-{{/has_family_calendar}}
-{{#has_archived}}
-    <!-- ===== ARCHIVED ===== -->
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>
-      <td bgcolor="#7b5cc9" style="background-color:#7b5cc9;border-radius:8px;padding:5px 11px;font-family:'Manrope',-apple-system,sans-serif;font-weight:700;font-size:11px;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">Archived · {{count_archived}}</td>
-    </tr></table>
-
-{{#archived}}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:{{#_first}}14{{/_first}}{{^_first}}16{{/_first}}px 0 6px;"><tr>
-      <td style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:11.5px;color:#5b4a91;letter-spacing:0.02em;text-transform:uppercase;">{{category}}</td>
-      <td align="right" width="40">
-        <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
-          <td bgcolor="#ece5fa" style="background-color:#ece5fa;border-radius:8px;padding:2px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#6a4cb8;">{{count}}</td>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td height="2" bgcolor="#1e9e74" style="background-color:#1e9e74;height:2px;line-height:2px;font-size:2px;">&nbsp;</td>
         </tr></table>
       </td>
     </tr></table>
-    <div style="border:1px solid #eee9fa;border-radius:10px;overflow:hidden;">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-{{#items}}
-        <tr{{^_last}} style="border-bottom:1px solid #f2effa;"{{/_last}}>
-          <td valign="top" style="padding:11px 0 11px 12px;width:34px;">
-            <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-              <td width="22" height="22" align="center" valign="middle" bgcolor="{{brand_color}}" style="width:22px;height:22px;background-color:{{brand_color}};border-radius:6px;color:#ffffff;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;text-align:center;">{{brand_initial}}</td>
-            </tr></table>
-          </td>
-          <td style="padding:10px 4px 10px 10px;">
-            <a href="#" style="font-size:13px;color:#171a24;text-decoration:none;">{{subject}}</a>
-            <div style="font-size:11px;color:#9aa0b4;margin-top:1px;">{{sender}}{{#gist}} · {{gist}}{{/gist}}</div>
-          </td>
-{{#unsubscribe_link}}
-          <td align="right" valign="middle" style="padding:10px 12px;white-space:nowrap;">
-            <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
-              <td bgcolor="#f0ebfb" style="background-color:#f0ebfb;border-radius:8px;padding:4px 10px;">
-                <a href="{{@unsubscribe_link}}" style="color:#6a4cb8;font-size:11px;font-weight:600;text-decoration:none;">Unsub</a>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding:13px 0 0 14px;">
+{{#events}}
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}0{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
+          <td bgcolor="#e4f7ef" style="background-color:#e4f7ef;border:1px solid #bfead9;border-radius:12px;padding:13px 15px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:8px;"><tr>
+              <td bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #bfead9;border-radius:9px;padding:3px 8px;">
+                <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                  <td valign="middle" style="padding-right:5px;"><span style="font-size:11px;line-height:14px;">{{calendar_glyph}}</span></td>
+                  <td valign="middle" style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#2f6b56;white-space:nowrap;">{{calendar}}</td>
+                </tr></table>
               </td>
             </tr></table>
+            <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;line-height:1.4;">
+              <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #7fc4ac;">{{title}}</a>
+            </div>
+{{#when}}
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:9px;"><tr>
+              <td valign="middle" style="padding-right:14px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">{{when}}</td>
+{{#location}}
+              <td valign="middle" style="padding-right:5px;"><span style="font-size:11px;line-height:14px;">📍</span></td>
+              <td valign="middle" style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#3d7a63;">{{location}}</td>
+{{/location}}
+            </tr></table>
+{{/when}}
+{{#reconciled_note}}
+            <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #bfead9;font-size:11.5px;color:#4d8a72;line-height:1.55;">
+              {{reconciled_note}}
+            </div>
+{{/reconciled_note}}
           </td>
+        </tr></table>
+{{/events}}
+      </td>
+    </tr></table>
+{{/has_events}}
+{{#has_todos}}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding:24px 0 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td width="26" valign="middle" style="padding:0 0 7px;">
+            <span style="font-size:16px;line-height:18px;">☑️</span>
+          </td>
+          <td valign="middle" style="padding:0 0 7px;font-family:'Manrope',-apple-system,sans-serif;font-weight:800;font-size:12px;letter-spacing:0.11em;color:#1d4295;text-transform:uppercase;">To-dos created</td>
+          <td align="right" valign="middle" style="padding:0 0 7px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+              <td bgcolor="#eaf0fe" style="background-color:#eaf0fe;border-radius:9px;padding:2px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#1d4295;">{{count_todos}}</td>
+            </tr></table>
+          </td>
+        </tr></table>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td height="2" bgcolor="#2451b8" style="background-color:#2451b8;height:2px;line-height:2px;font-size:2px;">&nbsp;</td>
+        </tr></table>
+      </td>
+    </tr></table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding:13px 0 0 14px;">
+{{#todos}}
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}0{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
+          <td bgcolor="#eaf0fe" style="background-color:#eaf0fe;border:1px solid #c9d9fb;border-radius:12px;padding:13px 15px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+              <td style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;line-height:1.4;">
+                <a href="{{@url}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #8fabe4;">{{title}}</a>
+              </td>
+{{#due}}
+              <td align="right" valign="top" style="white-space:nowrap;padding-left:10px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+                  <td bgcolor="#fbdedb" style="background-color:#fbdedb;border-radius:10px;padding:3px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#b53d34;white-space:nowrap;">{{due}}</td>
+                </tr></table>
+              </td>
+{{/due}}
+            </tr></table>
+{{#source_link}}
+            <div style="margin-top:8px;font-size:12px;color:#3355a3;"><a href="{{@source_link}}" style="color:#3355a3;">source email</a></div>
+{{/source_link}}
+{{#reconciled_note}}
+            <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #c9d9fb;font-size:11.5px;color:#3355a3;line-height:1.55;">
+              {{reconciled_note}}
+            </div>
+{{/reconciled_note}}
+          </td>
+        </tr></table>
+{{/todos}}
+      </td>
+    </tr></table>
+{{/has_todos}}
+{{#has_threads}}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding:24px 0 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td width="26" valign="middle" style="padding:0 0 7px;">
+            <span style="font-size:16px;line-height:18px;">💬</span>
+          </td>
+          <td valign="middle" style="padding:0 0 7px;font-family:'Manrope',-apple-system,sans-serif;font-weight:800;font-size:12px;letter-spacing:0.11em;color:#8a5c0a;text-transform:uppercase;">Left in your inbox</td>
+          <td align="right" valign="middle" style="padding:0 0 7px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+              <td bgcolor="#fcf1dd" style="background-color:#fcf1dd;border-radius:9px;padding:2px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#8a5c0a;">{{count_threads}}</td>
+            </tr></table>
+          </td>
+        </tr></table>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td height="2" bgcolor="#b9790e" style="background-color:#b9790e;height:2px;line-height:2px;font-size:2px;">&nbsp;</td>
+        </tr></table>
+      </td>
+    </tr></table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding:13px 0 0 14px;">
+{{#from_personal_threads}}
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:{{#_last}}0{{/_last}}{{^_last}}10{{/_last}}px;"><tr>
+          <td bgcolor="#fcf1dd" style="background-color:#fcf1dd;border:1px solid #f2dcae;border-radius:12px;padding:13px 15px;">
+            <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:14px;color:#171a24;line-height:1.4;">
+              <a href="{{@link}}" style="color:#171a24;text-decoration:none;border-bottom:1px solid #d9b055;">{{title}}</a>
+{{#kind_label}}
+              <span style="display:inline-block;background-color:#f2dcae;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;font-weight:600;color:#8a5c0a;padding:2px 7px;border-radius:8px;margin-left:6px;">{{kind_label}}</span>
+{{/kind_label}}
+            </div>
+{{#when_or_due}}
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:9px;"><tr>
+              <td valign="middle" style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#8a5c0a;">{{when_or_due}}</td>
+            </tr></table>
+{{/when_or_due}}
+{{#note}}
+            <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #f2dcae;font-size:11.5px;color:#8a5c0a;line-height:1.55;">
+              {{note}}
+            </div>
+{{/note}}
+          </td>
+        </tr></table>
+{{/from_personal_threads}}
+      </td>
+    </tr></table>
+{{/has_threads}}
+{{#has_archived}}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding:24px 0 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td width="26" valign="middle" style="padding:0 0 7px;">
+            <span style="font-size:16px;line-height:18px;">📥</span>
+          </td>
+          <td valign="middle" style="padding:0 0 7px;font-family:'Manrope',-apple-system,sans-serif;font-weight:800;font-size:12px;letter-spacing:0.11em;color:#5f43a8;text-transform:uppercase;">Archived</td>
+          <td align="right" valign="middle" style="padding:0 0 7px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+              <td bgcolor="#ece5fa" style="background-color:#ece5fa;border-radius:9px;padding:2px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#6a4cb8;">{{count_archived}}</td>
+            </tr></table>
+          </td>
+        </tr></table>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td height="2" bgcolor="#7b5cc9" style="background-color:#7b5cc9;height:2px;line-height:2px;font-size:2px;">&nbsp;</td>
+        </tr></table>
+      </td>
+    </tr></table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="padding:13px 0 0 14px;">
+{{#archived}}
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:{{#_first}}0{{/_first}}{{^_first}}16{{/_first}}px 0 6px;"><tr>
+          <td style="font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:11.5px;color:#5b4a91;letter-spacing:0.02em;text-transform:uppercase;">{{category}}</td>
+          <td align="right" width="40">
+            <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+              <td bgcolor="#ece5fa" style="background-color:#ece5fa;border-radius:8px;padding:2px 9px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;color:#6a4cb8;">{{count}}</td>
+            </tr></table>
+          </td>
+        </tr></table>
+        <div style="border:1px solid #eee9fa;border-radius:10px;overflow:hidden;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+{{#items}}
+            <tr{{^_last}} style="border-bottom:1px solid #f2effa;"{{/_last}}>
+              <td valign="top" style="padding:11px 0 11px 12px;width:34px;">
+                <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                  <td width="22" height="22" align="center" valign="middle" bgcolor="{{brand_color}}" style="width:22px;height:22px;background-color:{{brand_color}};border-radius:6px;color:#ffffff;font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;text-align:center;">{{brand_initial}}</td>
+                </tr></table>
+              </td>
+              <td style="padding:10px 4px 10px 10px;">
+                <a href="#" style="font-size:13px;color:#171a24;text-decoration:none;">{{subject}}</a>
+                <div style="font-size:11px;color:#9aa0b4;margin-top:1px;">{{sender}}{{#gist}} &middot; {{gist}}{{/gist}}</div>
+              </td>
+{{#unsubscribe_link}}
+              <td align="right" valign="middle" style="padding:10px 12px;white-space:nowrap;">
+                <table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>
+                  <td bgcolor="#f0ebfb" style="background-color:#f0ebfb;border-radius:8px;padding:4px 10px;">
+                    <a href="{{@unsubscribe_link}}" style="color:#6a4cb8;font-size:11px;font-weight:600;text-decoration:none;">Unsub</a>
+                  </td>
+                </tr></table>
+              </td>
 {{/unsubscribe_link}}
 {{^unsubscribe_link}}
-          <td></td>
+              <td></td>
 {{/unsubscribe_link}}
-        </tr>
+            </tr>
 {{/items}}
-      </table>
-    </div>
+          </table>
+        </div>
 {{/archived}}
+      </td>
+    </tr></table>
 {{/has_archived}}
 {{#has_recent_logins}}
-    <!-- ===== RECENT LOGINS ===== -->
-    <div style="margin:18px 0 6px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#9aa0b4;line-height:1.7;">
-      Recent logins: {{#recent_logins}}{{.}}{{^_last}} &nbsp;·&nbsp; {{/_last}}{{/recent_logins}}
+    <div style="margin:22px 0 0;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#9aa0b4;line-height:1.7;">
+      Recent logins: {{#recent_logins}}{{.}}{{^_last}} &nbsp;&middot;&nbsp; {{/_last}}{{/recent_logins}}
     </div>
 {{/has_recent_logins}}
 
@@ -370,7 +434,7 @@ EMBEDDED_TEMPLATE = r'''<title>Inbox Triage Digest</title>
 
 
   </div>
-  <div class="caption">↑ this frame's contents are the literal email — inline styles, table layout, no external assets required</div>
+  <div class="caption">↑ this frame's contents are the literal email — inline styles, table layout, no external assets</div>
 </div>
 '''
 
@@ -538,6 +602,31 @@ BRAND_OVERRIDES = (
 
 KIND_LABELS = {"event": "event created", "todo": "to-do created"}
 
+# The digest shows one Events section, not two. Fisher's own calendar and the shared
+# family one are the same kind of thing to a reader glancing at the morning email, and
+# splitting them buried "Lisa moved swim lessons" four sections down from "you have a
+# dentist appointment". They merge, and each row carries a badge naming its calendar
+# instead — the calendars are "Personal" and "Nottingham" in ROUTINE-PROMPT.md, shown
+# here as the shorter labels below.
+#
+# Both payload keys are still accepted, so a payload written against the old schema
+# renders unchanged; `events` rows default to Fisher's label and `family_calendar` rows
+# to the family one. A row may override with its own `calendar` field, which is the
+# forward-looking form — most events the routine creates land on Nottingham.
+PERSONAL_CALENDAR = "Fisher"
+FAMILY_CALENDAR = "Nottingham"
+
+# Substrings that mean "the shared one" for the purpose of picking the badge glyph, so
+# the icon follows the label rather than which payload key the row arrived under.
+FAMILY_HINTS = ("nottingham", "family", "shared")
+
+# Icons are Unicode, not images. The Gmail send path the routine uses deletes every
+# `<img>` it is handed — remote src and `cid:` inline attachment alike, verified by
+# probe on 2026-09-03 (#342) — so an image in this template is a blank gap by
+# construction, exactly as `<svg>` was before it. A glyph is text and arrives.
+FAMILY_GLYPH = "\N{BUSTS IN SILHOUETTE}"
+PERSONAL_GLYPH = "\N{BUST IN SILHOUETTE}"
+
 
 def _rows(value) -> list:
     return [r for r in value if isinstance(r, dict)] if isinstance(value, list) else []
@@ -556,6 +645,22 @@ def _clean(raw: dict) -> dict:
         else:
             out[key] = value
     return out
+
+
+def _calendar_row(raw: dict, default_label: str) -> dict:
+    """One event row, tagged with the calendar it belongs to.
+
+    `calendar` and `calendar_glyph` are always set here, never taken from the payload as
+    given — the label is a caption a reader trusts, so it is derived from a fixed set
+    rather than accepted from email-shaped input.
+    """
+    row = _clean(raw)
+    label = str(row.get("calendar") or default_label).strip() or default_label
+    row["calendar"] = label
+    lowered = label.lower()
+    family = any(hint in lowered for hint in FAMILY_HINTS)
+    row["calendar_glyph"] = FAMILY_GLYPH if family else PERSONAL_GLYPH
+    return row
 
 
 def _count(value) -> int:
@@ -582,7 +687,9 @@ def build_context(payload: dict) -> dict:
     # from the digest), so it can only come from the payload.
     n_left = _count(counts.get("left_in_inbox"))
 
-    events = [_clean(r) for r in _rows(payload.get("events"))]
+    events = [_calendar_row(r, PERSONAL_CALENDAR) for r in _rows(payload.get("events"))]
+    events += [_calendar_row(r, FAMILY_CALENDAR)
+               for r in _rows(payload.get("family_calendar"))]
     todos = [_clean(r) for r in _rows(payload.get("todos"))]
     threads = []
     for raw in _rows(payload.get("from_personal_threads")):
@@ -591,8 +698,6 @@ def build_context(payload: dict) -> dict:
         if kind:
             row["kind_label"] = KIND_LABELS.get(str(kind), f"{kind} created")
         threads.append(row)
-    family = [_clean(r) for r in _rows(payload.get("family_calendar"))]
-
     archived = []
     for raw in _rows(payload.get("archived")):
         items = []
@@ -617,6 +722,7 @@ def build_context(payload: dict) -> dict:
     # for a section whose list is absent entirely.
     n_todos = len(todos) or _count(counts.get("todos"))
     n_events = len(events) or _count(counts.get("events"))
+    n_threads = len(threads)
     n_archived = sum(c["count"] for c in archived) or _count(counts.get("archived"))
 
     return {
@@ -626,6 +732,7 @@ def build_context(payload: dict) -> dict:
         "fetch_failed": bool(payload.get("fetch_failed")),
         "count_todos": n_todos,
         "count_events": n_events,
+        "count_threads": n_threads,
         "count_archived": n_archived,
         "count_left_in_inbox": n_left,
         "label_todos": "to-do" if n_todos == 1 else "to-dos",
@@ -635,7 +742,6 @@ def build_context(payload: dict) -> dict:
         "events": events, "has_events": bool(events),
         "todos": todos, "has_todos": bool(todos),
         "from_personal_threads": threads, "has_threads": bool(threads),
-        "family_calendar": family, "has_family_calendar": bool(family),
         "archived": archived, "has_archived": bool(archived),
         "recent_logins": logins, "has_recent_logins": bool(logins),
     }
